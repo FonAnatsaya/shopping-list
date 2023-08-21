@@ -1,36 +1,43 @@
-import { Button } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
+import Input from '@mui/joy/Input';
+import Button from '@mui/joy/Button';
 import { useState } from 'react';
-
+import { FormGroup } from '@mui/material';
 
 export default function LoginPage() {
-
     const [loginForm, setLoginForm] = useState({
-        username: '',
-        password: ''
+        Username: "",
+        Password: ""
     })
-
-    const handleOnChange = (event) => {
-        setLoginForm({
-            ...loginForm, [event.target.name]: event.target.value
+    const handleForm = (e) => {
+        setLoginForm((prev) => {
+            return {
+                ...prev, [e.target.name]: e.target.value
+            }
         })
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(loginForm);
     }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <form onSubmit={handleSubmit}>
-                <FormControl>
-                    <TextField name="username" label="Username" onChange={handleOnChange} style={{ marginBottom: "12px" }} />
-                    <TextField name="password" type="password" label="Password" onChange={handleOnChange} style={{ marginBottom: "12px" }} />
-                    <Button type="submit" variant="contained">Submit</Button>
-                </FormControl>
+            <form
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    console.log(loginForm)
+                }}
+            >
+                <FormGroup>
+                    <FormControl sx={{ width: '28ch' }}>
+                        <FormLabel >Username</FormLabel>
+                        <Input type='text' name='Username' onChange={handleForm} placeholder="Username" />
+                    </FormControl>
+                    <FormControl sx={{ width: '28ch' }}>
+                        <FormLabel>Password</FormLabel>
+                        <Input type='password' name='Password' onChange={handleForm} placeholder="Password" />
+                    </FormControl>
+                    <Button type='submit' style={{ marginTop: "20px" }}>Submit</Button>
+                </FormGroup>
             </form>
         </div>
-    )
+    );
 }
