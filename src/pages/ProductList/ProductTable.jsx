@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Button from '@mui/joy/Button';
 
-export default function ProductTable({ list }) {
+export default function ProductTable({ list, deleteItemFunc }) {
     return (
         <Table aria-label="basic table">
             <thead>
@@ -22,7 +22,7 @@ export default function ProductTable({ list }) {
                         <td>{item.price}</td>
                         <td>
                             <Button variant="outlined" color="primary">Edit</Button>
-                            <Button variant="outlined" color="primary">Delete</Button>
+                            <Button variant="outlined" color="primary" onClick={() => deleteItemFunc(item.id)}>Delete</Button>
                         </td>
                     </tr>
                 )}

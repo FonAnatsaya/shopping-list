@@ -8,7 +8,7 @@ import Typography from '@mui/joy/Typography';
 import * as React from 'react';
 import { useState } from 'react';
 
-export default function ProductForm() {
+export default function ProductForm({ addItemFunc }) {
     const [item, setItem] = useState({ name: "", quantity: "", price: "" });
     const [open, setOpen] = React.useState(false);
     const handleChange = (evt) => {
@@ -18,7 +18,9 @@ export default function ProductForm() {
     }
     const handleSubmit = (evt) => {
         evt.preventDefault();
+        addItemFunc(item);
         setItem({ name: "", quantity: "", price: "" });
+        setOpen(false);
     }
 
     return (
