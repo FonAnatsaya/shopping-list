@@ -6,11 +6,19 @@ import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Typography from '@mui/joy/Typography';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function ProductForm({ addItemFunc }) {
+export default function ProductForm({ addItemFunc, editItemFunc, editedItem, IsSubmit, handleIsSubmit }) {
     const [item, setItem] = useState({ name: "", quantity: "", price: "" });
     const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        if (editedItem) {
+            setOpen(true);
+            setItem(editedItem);
+        }
+    }, [editedItem])
+
     const handleChange = (evt) => {
         setItem((prevItem) => (
             { ...prevItem, [evt.target.name]: evt.target.value }
@@ -22,6 +30,17 @@ export default function ProductForm({ addItemFunc }) {
         setItem({ name: "", quantity: "", price: "" });
         setOpen(false);
     }
+    const handleEditSubmit = (evt) => {
+        evt.preventDefault();
+        editItemFunc(item);
+        setItem({ name: "", quantity: "", price: "" });
+        setOpen(false);
+        handleIsSubmit(true);
+    }
+    const handleCloseModal = () => {
+        setOpen(false);
+        setItem({ name: "", quantity: "", price: "" });
+    }
 
     return (
         <>
@@ -32,7 +51,7 @@ export default function ProductForm({ addItemFunc }) {
             >
                 New Product
             </Button>
-            <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal open={open} onClose={handleCloseModal}>
                 <ModalDialog
                     aria-labelledby="basic-modal-dialog-title"
                     aria-describedby="basic-modal-dialog-description"
@@ -54,8 +73,11 @@ export default function ProductForm({ addItemFunc }) {
                             <FormLabel>Price</FormLabel>
                             <Input placeholder="Price" type='number' name='price' value={item.price} onChange={handleChange} />
                         </FormControl>
-                        <Button style={{ marginTop: "10px" }} type='submit'>Submit</Button>
-                        <Button style={{ marginTop: "10px", marginLeft: "12px" }} onClick={() => setOpen(false)}>Close</Button>
+                        {IsSubmit ?
+                            <Button style={{ marginTop: "10px" }} type='submit'>Submit</Button> :
+                            <Button style={{ marginTop: "10px" }} onClick={handleEditSubmit}>Edit Submit</Button>
+                        }
+                        <Button style={{ marginTop: "10px", marginLeft: "12px" }} onClick={handleCloseModal}>Close</Button>
                     </form>
                 </ModalDialog>
             </Modal>

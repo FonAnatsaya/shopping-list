@@ -10,19 +10,22 @@ export default function ProductList() {
         { id: uuid(), name: "A2", quantity: "20", price: "10" },
         { id: uuid(), name: "B1", quantity: "50", price: "8" }
     ])
-    const addItem = (item) => {
+    const [editedItem, setEditedItem] = useState(null);
+    const [IsSubmit, setIsSubmit] = useState(true);
+
+    const addItemFunc = (item) => {
         setList((prev) => {
             return [
                 ...prev, { ...item, id: uuid() }
             ]
         })
     }
-    const deleteItem = (id) => {
+    const deleteItemFunc = (id) => {
         setList((prev) => {
             return prev.filter((item) => (item.id !== id))
         })
     }
-    const editItem = (item) => {
+    const editItemFunc = (item) => {
         setList((prevs) => {
             return prevs.map((prev) => {
                 if (prev.id === item.id) return item;
@@ -31,10 +34,17 @@ export default function ProductList() {
         })
     }
 
+    const handleSubmit = (item) => {
+        setEditedItem(item);
+        setIsSubmit(false);
+    }
+
+    const handleIsSubmit = (isSubmit) => (setIsSubmit(isSubmit));
+
     return (
         <>
-            <ProductForm addItemFunc={addItem} />
-            <ProductTable list={list} deleteItemFunc={deleteItem} />
+            <ProductForm addItemFunc={addItemFunc} editItemFunc={editItemFunc} editedItem={editedItem} IsSubmit={IsSubmit} handleIsSubmit={handleIsSubmit} />
+            <ProductTable list={list} deleteItemFunc={deleteItemFunc} handleSubmit={handleSubmit} />
         </>
     );
 }
