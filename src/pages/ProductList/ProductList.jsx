@@ -11,7 +11,6 @@ export default function ProductList() {
         { id: uuid(), name: "B1", quantity: "50", price: "8" }
     ])
     const [editedItem, setEditedItem] = useState(null);
-    const [IsSubmit, setIsSubmit] = useState(true);
 
     const addItemFunc = (item) => {
         setList((prev) => {
@@ -36,14 +35,11 @@ export default function ProductList() {
 
     const handleSubmit = (item) => {
         setEditedItem(item);
-        setIsSubmit(false);
     }
-
-    const handleIsSubmit = (isSubmit) => (setIsSubmit(isSubmit));
 
     return (
         <>
-            <ProductForm addItemFunc={addItemFunc} editItemFunc={editItemFunc} editedItem={editedItem} IsSubmit={IsSubmit} handleIsSubmit={handleIsSubmit} />
+            <ProductForm addItemFunc={addItemFunc} editItemFunc={editItemFunc} editedItem={editedItem} setEditedItem={setEditedItem} />
             <ProductTable list={list} deleteItemFunc={deleteItemFunc} handleSubmit={handleSubmit} />
         </>
     );

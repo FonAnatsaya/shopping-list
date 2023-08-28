@@ -8,7 +8,7 @@ import Typography from '@mui/joy/Typography';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-export default function ProductForm({ addItemFunc, editItemFunc, editedItem, IsSubmit, handleIsSubmit }) {
+export default function ProductForm({ addItemFunc, editItemFunc, editedItem, setEditedItem }) {
     const [item, setItem] = useState({ name: "", quantity: "", price: "" });
     const [open, setOpen] = React.useState(false);
 
@@ -20,27 +20,27 @@ export default function ProductForm({ addItemFunc, editItemFunc, editedItem, IsS
     }, [editedItem])
 
     const handleChange = (evt) => {
-        setItem((prevItem) => (
-            { ...prevItem, [evt.target.name]: evt.target.value }
-        ))
+        const { name, value } = evt.target;
+        setItem((prevItem) => ({ ...prevItem, [name]: value }))
     }
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        addItemFunc(item);
+        if (editedItem) {
+            editItemFunc(item);
+            setEditedItem(null); // Reset editedItem when editing is done
+        } else {
+            addItemFunc(item);
+        }
         setItem({ name: "", quantity: "", price: "" });
         setOpen(false);
-    }
-    const handleEditSubmit = (evt) => {
-        evt.preventDefault();
-        editItemFunc(item);
-        setItem({ name: "", quantity: "", price: "" });
-        setOpen(false);
-        handleIsSubmit(true);
     }
     const handleCloseModal = () => {
         setOpen(false);
         setItem({ name: "", quantity: "", price: "" });
+        setEditedItem(null);
     }
+
+    const submitButtonText = editedItem ? "Edit Submit" : "Submit";
 
     return (
         <>
@@ -73,10 +73,7 @@ export default function ProductForm({ addItemFunc, editItemFunc, editedItem, IsS
                             <FormLabel>Price</FormLabel>
                             <Input placeholder="Price" type='number' name='price' value={item.price} onChange={handleChange} />
                         </FormControl>
-                        {IsSubmit ?
-                            <Button style={{ marginTop: "10px" }} type='submit'>Submit</Button> :
-                            <Button style={{ marginTop: "10px" }} onClick={handleEditSubmit}>Edit Submit</Button>
-                        }
+                        <Button style={{ marginTop: "10px" }} type='submit'>{submitButtonText}</Button> :
                         <Button style={{ marginTop: "10px", marginLeft: "12px" }} onClick={handleCloseModal}>Close</Button>
                     </form>
                 </ModalDialog>
