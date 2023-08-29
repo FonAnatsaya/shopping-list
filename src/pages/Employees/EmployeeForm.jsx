@@ -12,12 +12,19 @@ import Option from '@mui/joy/Option';
 export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
     const [form, setForm] = useState({ name: "", position: "", salary: "" });
     const [open, setOpen] = useState(false);
+    const [warning, setWarning] = useState(false);
+
     useEffect(() => {
         if (editedEmployee) {
             setForm(editedEmployee);
             setOpen(true);
         }
     }, [editedEmployee])
+
+    useEffect(() => {
+        if (form.position !== "CEO") setWarning(false);
+    }
+        , [form.position])
 
     const handleChange = (evt) => {
         setForm((prev) => ({ ...prev, [evt?.target.name]: evt?.target.value }))
@@ -28,6 +35,12 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+        const { position } = form;
+        if (position == "CEO") {
+            setWarning(true);
+            return;
+        }
+
         if (editedEmployee) {
             setEditedEmployee(null);
             editEmployeeFunc(form);
@@ -36,6 +49,7 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
         }
         setForm({ name: "", position: "", salary: "" });
         setOpen(false);
+        setWarning(false);
     }
 
     const handleCloseButton = () => {
@@ -81,6 +95,8 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
                             <FormLabel>Salary</FormLabel>
                             <Input placeholder="salary" onChange={handleChange} name="salary" value={form.salary} />
                         </FormControl>
+                        {warning && <h3 style={{ color: "red" }}>CEO already exiisted!!</h3>}
+
                         <Button style={{ marginTop: "16px" }} type="submit" >{submitButtonText}</Button>
                         <Button onClick={handleCloseButton}>Close</Button>
                     </form >
