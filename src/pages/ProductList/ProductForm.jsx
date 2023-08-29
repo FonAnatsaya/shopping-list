@@ -14,8 +14,8 @@ export default function ProductForm({ addItemFunc, editItemFunc, editedItem, set
 
     useEffect(() => {
         if (editedItem) {
-            setOpen(true);
             setItem(editedItem);
+            setOpen(true);
         }
     }, [editedItem])
 
@@ -58,7 +58,7 @@ export default function ProductForm({ addItemFunc, editItemFunc, editedItem, set
                     sx={{ maxWidth: 500 }}
                 >
                     <Typography id="basic-modal-dialog-title" level="h2">
-                        Create new Product
+                        Product Information
                     </Typography>
                     <form onSubmit={handleSubmit}>
                         <FormControl style={{ marginRight: "10px" }}>

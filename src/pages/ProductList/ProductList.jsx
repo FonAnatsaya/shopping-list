@@ -33,14 +33,14 @@ export default function ProductList() {
         })
     }
 
-    const handleSubmit = (item) => {
+    const handleSubmitFunc = (item) => {
         setEditedItem(item);
     }
 
     return (
         <>
             <ProductForm addItemFunc={addItemFunc} editItemFunc={editItemFunc} editedItem={editedItem} setEditedItem={setEditedItem} />
-            <ProductTable list={list} deleteItemFunc={deleteItemFunc} handleSubmit={handleSubmit} />
+            <ProductTable list={list} deleteItemFunc={deleteItemFunc} handleSubmitFunc={handleSubmitFunc} />
         </>
     );
 }
