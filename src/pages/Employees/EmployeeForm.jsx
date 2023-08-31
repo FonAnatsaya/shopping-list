@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import * as React from 'react';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -8,6 +9,7 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import Typography from '@mui/joy/Typography';
 import Select from "@mui/joy/Select";
 import Option from '@mui/joy/Option';
+import FormHelperText from '@mui/joy/FormHelperText';
 
 export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
     const [form, setForm] = useState({ name: "", position: "", salary: "" });
@@ -23,13 +25,18 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
     }, [editedEmployee])
 
     useEffect(() => {
-        if (form.position !== "CEO") setWarningCEO(false);
+        if (form.position === "CEO") setWarningCEO(true);
+        else {
+            setWarningCEO(false);
+        }
     }
         , [form.position])
 
     useEffect(() => {
         if (form) setWarningBlank(false);
     }, [form])
+
+
 
     const handleChange = (evt) => {
         setForm((prev) => ({ ...prev, [evt?.target.name]: evt?.target.value }))
@@ -41,12 +48,12 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
     const handleSubmit = (evt) => {
         evt.preventDefault();
         const { name, position, salary } = form;
-        if (position == "CEO") {
-            setWarningCEO(true);
+        console.log("name = " + name, "position = " + position, "salary = " + salary);
+        if (!name || !position || !salary) {
+            setWarningBlank(true);
             return;
         }
-        if (name == null || position == null || salary == null) {
-            setWarningBlank(true);
+        if (position === "CEO") {
             return;
         }
         if (editedEmployee) {
@@ -57,8 +64,6 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
         }
         setForm({ name: "", position: "", salary: "" });
         setOpen(false);
-        setWarningCEO(false);
-        setWarningBlank(false);
     }
 
     const handleCloseButton = () => {
@@ -67,7 +72,7 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
         setEditedEmployee(null);
     }
     const submitButtonText = editedEmployee ? "Edit Submit" : "Submit";
-
+    const inputRef = React.useRef(null);
     return (
         <>
             <Button
@@ -89,7 +94,7 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
                     <form onSubmit={handleSubmit}>
                         <FormControl>
                             <FormLabel>Name</FormLabel>
-                            <Input placeholder="name" onChange={(evt) => handleChange(evt)} name="name" value={form.name} />
+                            <Input type="text" placeholder="name" onChange={(evt) => handleChange(evt)} name="name" value={form.name} />
                         </FormControl>
                         <FormControl>
                             <FormLabel>Position</FormLabel>
@@ -99,13 +104,27 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
                                 <Option value="IT Support">IT Support</Option >
                                 <Option value="Data Analyst">Data Analyst</Option >
                             </Select>
+                            {warningCEO && <h4 style={{ color: "red" }}>CEO already existed!!</h4>}
                         </FormControl>
                         <FormControl>
                             <FormLabel>Salary</FormLabel>
-                            <Input placeholder="salary" onChange={handleChange} name="salary" value={form.salary} />
+                            <Input
+                                type="number"
+                                placeholder="salary"
+                                slotProps={{
+                                    input: {
+                                        ref: inputRef,
+                                        min: 1,
+                                        step: 1,
+                                    },
+                                }}
+                                onChange={handleChange}
+                                name="salary"
+                                value={form.salary} />
+                            <FormHelperText style={{ color: "green" }} >Salary need to be more than 0.</FormHelperText>
                         </FormControl>
-                        {warningCEO && <h3 style={{ color: "red" }}>CEO already existed!!</h3>}
                         {warningBlank && <h4 style={{ color: "red" }}>Can not leave any fields blank!!</h4>}
+
                         <Button style={{ marginTop: "16px" }} type="submit" >{submitButtonText}</Button>
                         <Button onClick={handleCloseButton}>Close</Button>
                     </form >
