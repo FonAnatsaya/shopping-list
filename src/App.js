@@ -25,7 +25,6 @@ function App() {
               </Routes>
             </div>
           </Grid>
-
         </Grid>
 
       </div>

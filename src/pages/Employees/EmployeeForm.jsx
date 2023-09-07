@@ -36,8 +36,6 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
         if (form) setWarningBlank(false);
     }, [form])
 
-
-
     const handleChange = (evt) => {
         setForm((prev) => ({ ...prev, [evt?.target.name]: evt?.target.value }))
     }
