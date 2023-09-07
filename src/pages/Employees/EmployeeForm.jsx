@@ -19,6 +19,7 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
 
     useEffect(() => {
         if (editedEmployee) {
+            console.log(editedEmployee);
             setForm(editedEmployee);
             setOpen(true);
         }
