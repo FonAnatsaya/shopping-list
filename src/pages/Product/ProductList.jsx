@@ -1,29 +1,57 @@
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
+import { CallApiTest2 } from "./ProductService";
+import axios from 'axios';
 
 export default function ProductList() {
-    const [list, setList] = useState([
-        { id: uuid(), name: "A1", quantity: "18", price: "5" },
-        { id: uuid(), name: "A2", quantity: "20", price: "10" },
-        { id: uuid(), name: "B1", quantity: "50", price: "8" }
-    ])
+    const [list, setList] = useState([]);
     const [editedItem, setEditedItem] = useState(null);
 
-    const addItemFunc = (item) => {
-        setList((prev) => {
-            return [
-                ...prev, { ...item, id: uuid() }
-            ]
-        })
+    useEffect(() => {
+        search();
+    }, [])
+
+    const search = () => {
+        CallApiTest2()
+            .then((response) => {
+                setList(response.data);
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+            });
     }
-    const deleteItemFunc = (id) => {
-        setList((prev) => {
-            return prev.filter((item) => (item.id !== id))
-        })
+
+    const addItemFunc = async (item) => {
+        await axios.post('http://localhost:8080/api/product', item)
+            .then((response) => {
+                if (response.status === 201) {
+                    search();
+                } else {
+                    console.log(`Response status found is ${response.status}`);
+                }
+            })
+            .catch((error) => {
+                console.error('Found error', error);
+            })
     }
+
+    const deleteItemFunc = async (id) => {
+        await axios.delete(`http://localhost:8080/api/product/${id}`)
+            .then((response) => {
+                if (response.status === 204) {
+                    search();
+                } else {
+                    console.log(`Response status found is ${response.status}`);
+                }
+            })
+            .catch((error) => {
+                console.error('Found error', error);
+            })
+    }
+
     const editItemFunc = (item) => {
         setList((prevs) => {
             return prevs.map((prev) => {

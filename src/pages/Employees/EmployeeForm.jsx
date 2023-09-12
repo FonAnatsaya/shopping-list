@@ -11,31 +11,40 @@ import Select from "@mui/joy/Select";
 import Option from '@mui/joy/Option';
 import FormHelperText from '@mui/joy/FormHelperText';
 
-export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
-    const [form, setForm] = useState({ name: "", position: "", salary: "" });
+export default function EmployeeForm({ employeeList, addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
+    const [form, setForm] = useState({ name: "", position: "", salary: "", id: null });
     const [open, setOpen] = useState(false);
     const [warningCEO, setWarningCEO] = useState(false);
     const [warningBlank, setWarningBlank] = useState(false);
 
     useEffect(() => {
         if (editedEmployee) {
-            console.log(editedEmployee);
             setForm(editedEmployee);
             setOpen(true);
         }
     }, [editedEmployee])
 
     useEffect(() => {
-        if (form.position === "CEO") setWarningCEO(true);
-        else {
-            setWarningCEO(false);
-        }
-    }
-        , [form.position])
+        IsCEO(form);
+    }, [form.position])
 
     useEffect(() => {
         if (form) setWarningBlank(false);
     }, [form])
+
+    const IsCEO = (form) => {
+        const hasCEO = employeeList.filter(emp => emp.id !== form.id).some((em) => {
+            return form.position === "CEO" && em.position === "CEO";
+        });
+
+        if (hasCEO) {
+            setWarningCEO(true);
+            return true;
+        } else {
+            setWarningCEO(false);
+            return false;
+        }
+    }
 
     const handleChange = (evt) => {
         setForm((prev) => ({ ...prev, [evt?.target.name]: evt?.target.value }))
@@ -47,12 +56,11 @@ export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmpl
     const handleSubmit = (evt) => {
         evt.preventDefault();
         const { name, position, salary } = form;
-        console.log("name = " + name, "position = " + position, "salary = " + salary);
         if (!name || !position || !salary) {
             setWarningBlank(true);
             return;
         }
-        if (position === "CEO") {
+        if (IsCEO(form)) {
             return;
         }
         if (editedEmployee) {

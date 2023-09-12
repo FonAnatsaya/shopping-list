@@ -67,14 +67,10 @@ export default function EmployeeList() {
         }
     }
 
-    const setEditEmployeeFunc = (editedEmployee) => {
-        setEditedEmployee(editedEmployee);
-    }
-
     return (
         <>
-            <EmployeeForm addEmployeeFunc={addEmployeeFunc} editedEmployee={editedEmployee} editEmployeeFunc={editEmployeeFunc} setEditedEmployee={setEditedEmployee} />
-            <EmployeeTable employeeList={employeeList} deleteEmployeeFunc={deleteEmployeeFunc} editEmployeeFunc={setEditEmployeeFunc} />
+            <EmployeeForm employeeList={employeeList} addEmployeeFunc={addEmployeeFunc} editedEmployee={editedEmployee} editEmployeeFunc={editEmployeeFunc} setEditedEmployee={setEditedEmployee} />
+            <EmployeeTable employeeList={employeeList} deleteEmployeeFunc={deleteEmployeeFunc} editEmployeeFunc={setEditedEmployee} />
         </>
     )
 }
