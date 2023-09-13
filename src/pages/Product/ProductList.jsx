@@ -48,27 +48,28 @@ export default function ProductList() {
                 }
             })
             .catch((error) => {
-                console.error('Found error', error);
+                console.error('Found error: ', error);
             })
     }
 
-    const editItemFunc = (item) => {
-        setList((prevs) => {
-            return prevs.map((prev) => {
-                if (prev.id === item.id) return item;
-                return prev;
+    const editItemFunc = async (item) => {
+        await axios.patch(`http://localhost:8080/api/product/${item.id}`, item)
+            .then((response) => {
+                if (response.status === 200) {
+                    search();
+                } else {
+                    console.log(`Response status found is ${response.status}`);
+                }
             })
-        })
-    }
-
-    const handleSubmitFunc = (item) => {
-        setEditedItem(item);
+            .catch((error) => {
+                console.error('Found error: ', error);
+            })
     }
 
     return (
         <>
             <ProductForm addItemFunc={addItemFunc} editItemFunc={editItemFunc} editedItem={editedItem} setEditedItem={setEditedItem} />
-            <ProductTable list={list} deleteItemFunc={deleteItemFunc} handleSubmitFunc={handleSubmitFunc} />
+            <ProductTable list={list} deleteItemFunc={deleteItemFunc} setEditedItem={setEditedItem} />
         </>
     );
 }
