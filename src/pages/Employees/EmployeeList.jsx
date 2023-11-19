@@ -25,11 +25,8 @@ export default function EmployeeList() {
     const addEmployeeFunc = async (newEmployee) => {
         await axios.post('http://localhost:8080/api/employees', newEmployee)
             .then((response) => {
-                console.log(response);
                 if ((response.status === 201)) {
                     search();
-                } else {
-                    console.log(`Response from API : ${response.json}`); // Incase response's json sent from API backend doesn't match 201.
                 }
             })
             .catch((error) => {
@@ -52,8 +49,9 @@ export default function EmployeeList() {
     }
 
     const editEmployeeFunc = async (editedEmp) => {
+        console.log(editedEmp);
         try {
-            const response = await axios.patch(`http://localhost:8080/api/employees/${editedEmp.id}`, editedEmp);
+            const response = await axios.patch(`http://localhost:8080/api/employees/${editedEmp._id}`, editedEmp); //MongoDB automatically create _id not id !!!!
             if (response.status === 200) {
                 // If the request is successful, update the employee in the frontend state
                 search();
@@ -69,7 +67,7 @@ export default function EmployeeList() {
 
     return (
         <>
-            <EmployeeForm employeeList={employeeList} addEmployeeFunc={addEmployeeFunc} editedEmployee={editedEmployee} editEmployeeFunc={editEmployeeFunc} setEditedEmployee={setEditedEmployee} />
+            <EmployeeForm addEmployeeFunc={addEmployeeFunc} editedEmployee={editedEmployee} editEmployeeFunc={editEmployeeFunc} setEditedEmployee={setEditedEmployee} />
             <EmployeeTable employeeList={employeeList} deleteEmployeeFunc={deleteEmployeeFunc} editEmployeeFunc={setEditedEmployee} />
         </>
     )

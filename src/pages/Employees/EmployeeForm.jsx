@@ -10,12 +10,25 @@ import Typography from '@mui/joy/Typography';
 import Select from "@mui/joy/Select";
 import Option from '@mui/joy/Option';
 import FormHelperText from '@mui/joy/FormHelperText';
+import { CallApiForOccupation } from './OccupationServices';
 
-export default function EmployeeForm({ employeeList, addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
+export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
     const [form, setForm] = useState({ name: "", position: "", salary: "", id: null });
     const [open, setOpen] = useState(false);
-    const [warningCEO, setWarningCEO] = useState(false);
+    // const [warningCEO, setWarningCEO] = useState(false);
     const [warningBlank, setWarningBlank] = useState(false);
+    const [occupationList, setOccupationList] = useState([]);
+
+    useEffect(() => {
+        CallApiForOccupation()
+            .then((response) => {
+                console.log(response.data);
+                setOccupationList(response.data);
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+            });
+    }, [])
 
     useEffect(() => {
         if (editedEmployee) {
@@ -24,27 +37,23 @@ export default function EmployeeForm({ employeeList, addEmployeeFunc, editedEmpl
         }
     }, [editedEmployee])
 
-    useEffect(() => {
-        IsCEO(form);
-    }, [form.position])
+    // useEffect(() => {
+    //     IsCEO(form);
+    // }, [form.position])
 
     useEffect(() => {
         if (form) setWarningBlank(false);
     }, [form])
 
-    const IsCEO = (form) => {
-        const hasCEO = employeeList.filter(emp => emp.id !== form.id).some((em) => {
-            return form.position === "CEO" && em.position === "CEO";
-        });
-
-        if (hasCEO) {
-            setWarningCEO(true);
-            return true;
-        } else {
-            setWarningCEO(false);
-            return false;
-        }
-    }
+    // const IsCEO = (hasCEO) => {
+    //     if (hasCEO) {
+    //         setWarningCEO(true);
+    //         return true;
+    //     } else {
+    //         setWarningCEO(false);
+    //         return false;
+    //     }
+    // }
 
     const handleChange = (evt) => {
         setForm((prev) => ({ ...prev, [evt?.target.name]: evt?.target.value }))
@@ -60,9 +69,9 @@ export default function EmployeeForm({ employeeList, addEmployeeFunc, editedEmpl
             setWarningBlank(true);
             return;
         }
-        if (IsCEO(form)) {
-            return;
-        }
+
+        // if (IsCEO(form)) return;
+
         if (editedEmployee) {
             setEditedEmployee(null);
             editEmployeeFunc(form);
@@ -106,12 +115,10 @@ export default function EmployeeForm({ employeeList, addEmployeeFunc, editedEmpl
                         <FormControl>
                             <FormLabel>Position</FormLabel>
                             <Select placeholder="position" onChange={(_, newValue) => handleChangeSelect(newValue, 'position')} value={form.position}>
-                                <Option value="CEO">CEO</Option >
-                                <Option value="Junior Developer">Junior Developer</Option >
-                                <Option value="IT Support">IT Support</Option >
-                                <Option value="Data Analyst">Data Analyst</Option >
+                                <Option value="">--Please select--</Option >
+                                {occupationList.map((occ) => <Option key={occ.key} value={occ.description}>{occ.description}</Option >)}
                             </Select>
-                            {warningCEO && <h4 style={{ color: "red" }}>CEO already existed!!</h4>}
+                            {/* {warningCEO && <h4 style={{ color: "red" }}>CEO already existed!!</h4>} */}
                         </FormControl>
                         <FormControl>
                             <FormLabel>Salary</FormLabel>

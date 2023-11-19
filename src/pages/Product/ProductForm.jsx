@@ -27,7 +27,7 @@ export default function ProductForm({ addItemFunc, editItemFunc, editedItem, set
         evt.preventDefault();
         if (editedItem) {
             editItemFunc(item);
-            setEditedItem(null); // Reset editedItem when editing is done
+            setEditedItem(null); // Reset editedItem when done
         } else {
             addItemFunc(item);
         }

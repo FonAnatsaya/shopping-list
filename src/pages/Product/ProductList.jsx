@@ -2,7 +2,6 @@ import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { v4 as uuid } from 'uuid';
 import { CallApiTest2 } from "./ProductService";
 import axios from 'axios';
 
@@ -53,7 +52,7 @@ export default function ProductList() {
     }
 
     const editItemFunc = async (item) => {
-        await axios.patch(`http://localhost:8080/api/product/${item.id}`, item)
+        await axios.patch(`http://localhost:8080/api/product/${item._id}`, item)
             .then((response) => {
                 if (response.status === 200) {
                     search();

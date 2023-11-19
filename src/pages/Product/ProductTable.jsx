@@ -14,13 +14,13 @@ export default function ProductTable({ list, deleteItemFunc, setEditedItem }) {
             </thead>
             <tbody>
                 {list.map((item) =>
-                    <tr key={item.id}>
+                    <tr key={item._id}>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
                         <td>{item.price}</td>
                         <td>
                             <Button variant="outlined" color="primary" style={{ marginRight: "8px" }} onClick={() => setEditedItem(item)}>Edit</Button>
-                            <Button variant="outlined" color="primary" onClick={() => deleteItemFunc(item.id)}>Delete</Button>
+                            <Button variant="outlined" color="primary" onClick={() => deleteItemFunc(item._id)}>Delete</Button>
                         </td>
                     </tr>
                 )}
