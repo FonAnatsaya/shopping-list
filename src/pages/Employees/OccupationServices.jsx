@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function CallApiForOccupation() {
+export default function CallApiForOccupation() {
     return axios.get('http://localhost:8080/occupationList')
         .then((response) => {
             return response; // Return the response data if needed

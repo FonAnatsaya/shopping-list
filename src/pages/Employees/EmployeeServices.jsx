@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function CallApiTest() {
+export default function CallApiTest() {
     return axios.get('http://localhost:8080/empList')
         .then((response) => {
             return response; // Return the response data if needed

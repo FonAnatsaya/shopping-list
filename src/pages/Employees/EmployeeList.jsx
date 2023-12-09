@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import EmployeeTable from './EmployeeTable';
 import EmployeeForm from './EmployeeForm';
-import { CallApiTest } from './EmployeeServices';
+import CallApiTest from './EmployeeServices';
 import axios from 'axios';
 
 export default function EmployeeList() {

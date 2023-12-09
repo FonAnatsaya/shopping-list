@@ -10,7 +10,7 @@ import Typography from '@mui/joy/Typography';
 import Select from "@mui/joy/Select";
 import Option from '@mui/joy/Option';
 import FormHelperText from '@mui/joy/FormHelperText';
-import { CallApiForOccupation } from './OccupationServices';
+import CallApiForOccupation from './OccupationServices';
 
 export default function EmployeeForm({ addEmployeeFunc, editedEmployee, editEmployeeFunc, setEditedEmployee }) {
     const [form, setForm] = useState({ name: "", position: "", salary: "", id: null });
