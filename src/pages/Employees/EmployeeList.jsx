@@ -15,6 +15,7 @@ export default function EmployeeList() {
     const search = () => {
         CallApiTest()
             .then((response) => {
+                console.log(response);
                 setEmployeeList(response.data);
             })
             .catch((error) => {
@@ -22,8 +23,8 @@ export default function EmployeeList() {
             });
     }
 
-    const addEmployeeFunc = async (newEmployee) => {
-        await axios.post('http://localhost:8080/api/employees', newEmployee)
+    const addEmployeeFunc =  (newEmployee) => {
+         axios.post('http://localhost:8080/api/employees', newEmployee)
             .then((response) => {
                 if ((response.status === 201)) {
                     search();
@@ -34,8 +35,8 @@ export default function EmployeeList() {
             })
     }
 
-    const deleteEmployeeFunc = async (id) => {
-        await axios.delete(`http://localhost:8080/api/employees/${id}`)
+    const deleteEmployeeFunc = (id) => {
+        axios.delete(`http://localhost:8080/api/employees/${id}`)
             .then((response) => {
                 if (response.status === 204) {
                     search();
@@ -48,10 +49,10 @@ export default function EmployeeList() {
             })
     }
 
-    const editEmployeeFunc = async (editedEmp) => {
+    const editEmployeeFunc = (editedEmp) => {
         console.log(editedEmp);
         try {
-            const response = await axios.patch(`http://localhost:8080/api/employees/${editedEmp._id}`, editedEmp); //MongoDB automatically create _id not id !!!!
+            const response = axios.patch(`http://localhost:8080/api/employees/${editedEmp._id}`, editedEmp); //MongoDB automatically create _id not id !!!!
             if (response.status === 200) {
                 // If the request is successful, update the employee in the frontend state
                 search();

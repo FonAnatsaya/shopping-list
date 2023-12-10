@@ -18,7 +18,7 @@ function App() {
           {/* Content */}
           <Grid item xs={9}>
             <div>
-              <h1></h1>
+              <h1>Hello</h1>
               <Routes>
                 <Route path="/product-list" element={<ProductList />} />
                 <Route path="/employee-list" element={<EmployeeList />} />
