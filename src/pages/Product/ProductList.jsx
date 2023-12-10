@@ -23,8 +23,8 @@ export default function ProductList() {
             });
     }
 
-    const addItemFunc = async (item) => {
-        await axios.post('http://localhost:8080/api/product', item)
+    const addItemFunc = (item) => {
+         axios.post('http://localhost:8080/api/product', item)
             .then((response) => {
                 if (response.status === 201) {
                     search();
@@ -37,8 +37,8 @@ export default function ProductList() {
             })
     }
 
-    const deleteItemFunc = async (id) => {
-        await axios.delete(`http://localhost:8080/api/product/${id}`)
+    const deleteItemFunc = (id) => {
+         axios.delete(`http://localhost:8080/api/product/${id}`)
             .then((response) => {
                 if (response.status === 204) {
                     search();
@@ -51,8 +51,8 @@ export default function ProductList() {
             })
     }
 
-    const editItemFunc = async (item) => {
-        await axios.patch(`http://localhost:8080/api/product/${item._id}`, item)
+    const editItemFunc = (item) => {
+        axios.patch(`http://localhost:8080/api/product/${item._id}`, item)
             .then((response) => {
                 if (response.status === 200) {
                     search();
